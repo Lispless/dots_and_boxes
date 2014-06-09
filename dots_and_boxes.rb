@@ -1,6 +1,9 @@
 require 'gosu'
+require 'pry'
 require_relative 'lib/bounding_box.rb'
 require_relative 'lib/bounding_area.rb'
+require_relative 'lib/Player.rb'
+require_relative 'lib/Ground.rb'
 
 class GameWindow < Gosu::Window
   def initialize
@@ -11,22 +14,28 @@ class GameWindow < Gosu::Window
 
     @player = Player.new(self)
     @player.warp(320, 240)
-    @tile = Ground.new(self)
+    @tile = Ground.new(self,120,240)
   end
 
   def update
     if button_down? Gosu::KbLeft or button_down? Gosu::GpLeft then
-      @player.turn_left
+      @player.move_left
     end
 
     if button_down? Gosu::KbRight or button_down? Gosu::GpRight then
-      @player.turn_right
+      @player.move_right
     end
 
     if button_down? Gosu::KbUp or button_down? Gosu::GpButton0 then
-      @player.accelerate
+      #@player.accelerate
     end
-    @player.move
+
+    #should not go through floor
+    binding.pry
+    if @player.player_hit_zone.left < @tile.hit_zone.right
+      @player.move
+    end
+
   end
 
   def draw
@@ -38,65 +47,6 @@ class GameWindow < Gosu::Window
   def button_down(id)
     if id == Gosu::KbEscape
       close
-    end
-  end
-
-  class Player
-    def initialize(window)
-      @image = Gosu::Image.new(window, "media/tifa_stand.png", false)
-      @x = @y = @vel_x = @vel_y = @angle = 0.0
-      @score = 0
-      @plateyer_hit_zone = BoundingBox.new(0, 0, 29, 62)
-    end
-
-    def warp(x, y)
-      @x, @y = x, y
-    end
-
-    def turn_left
-      @angle -= 4.5
-    end
-
-    def turn_right
-      @angle += 4.5
-    end
-
-    def accelerate
-      @vel_x += Gosu::offset_x(@angle, 0.5)
-      @vel_y += Gosu::offset_y(@angle, 0.5)
-    end
-
-    def move
-      @x += @vel_x
-      @y += @vel_y
-      @x %= 640
-      @y %= 480
-
-      @vel_x *= 0.95
-      @vel_y *= 0.95
-    end
-
-    def draw
-      @image.draw_rot(@x, @y, 1, @angle)
-    end
-  end
-
-  class Ground
-    def initialize(window)
-      @image = Gosu::Image.new(window, "media/tile.png", false)
-      @hit_zone = BoundingBox.new(0, 0, 66, 64)
-    end
-
-    def draw
-      @image.draw(0, 350, 2)
-      @image.draw(60, 350, 2)
-      @image.draw(120, 350, 2)
-      @image.draw(180, 350, 2)
-      @image.draw(240, 350, 2)
-      @image.draw(300, 350, 2)
-      @image.draw(420, 350, 2)
-      @image.draw(480, 350, 2)
-      @image.draw(540, 350, 2)
     end
   end
 end
