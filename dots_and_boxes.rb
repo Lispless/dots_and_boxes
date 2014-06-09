@@ -1,14 +1,16 @@
 require 'gosu'
+require_relative 'bounding_box.rb'
 
 class GameWindow < Gosu::Window
   def initialize
-    super(640, 480, false)
+    super(700, 400, false)
     self.caption = "Dots and Boxes"
 
-    @background_image = Gosu::Image.new(self, "media/green_hill_zone.png", true)
+    @background_image = Gosu::Image.new(self, "media/ghbg.png", true)
 
     @player = Player.new(self)
     @player.warp(320, 240)
+    @tile = Ground.new(self)
   end
 
   def update
@@ -29,6 +31,7 @@ class GameWindow < Gosu::Window
   def draw
     @player.draw
     @background_image.draw(0, 0, 0)
+    @tile.draw
   end
 
   def button_down(id)
@@ -39,9 +42,10 @@ class GameWindow < Gosu::Window
 
   class Player
     def initialize(window)
-      @image = Gosu::Image.new(window, "media/tails.png", false)
+      @image = Gosu::Image.new(window, "media/tifa_stand.png", false)
       @x = @y = @vel_x = @vel_y = @angle = 0.0
       @score = 0
+      @plateyer_hit_zone = BoundingBox.new(0, 0, 29, 62)
     end
 
     def warp(x, y)
@@ -73,6 +77,25 @@ class GameWindow < Gosu::Window
 
     def draw
       @image.draw_rot(@x, @y, 1, @angle)
+    end
+  end
+
+  class Ground
+    def initialize(window)
+      @image = Gosu::Image.new(window, "media/tile.png", false)
+      @hit_zone = BoundingBox.new(0, 0, 66, 64)
+    end
+
+    def draw
+      @image.draw(0, 350, 2)
+      @image.draw(60, 350, 2)
+      @image.draw(120, 350, 2)
+      @image.draw(180, 350, 2)
+      @image.draw(240, 350, 2)
+      @image.draw(300, 350, 2)
+      @image.draw(420, 350, 2)
+      @image.draw(480, 350, 2)
+      @image.draw(540, 350, 2)
     end
   end
 end
