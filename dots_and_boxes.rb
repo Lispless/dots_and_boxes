@@ -17,22 +17,23 @@ class GameWindow < Gosu::Window
     @tile = Ground.new(self,120,240)
   end
 
+  # def colides?(player, world, enemies)
+  #   world.each do |object|
+
+
+  #   else
+  #     return false
+  #   end
+  # end
+
+
+
   def update
-    if button_down? Gosu::KbLeft or button_down? Gosu::GpLeft then
-      @player.move_left
-    end
+    @player.update(self)
 
-    if button_down? Gosu::KbRight or button_down? Gosu::GpRight then
-      @player.move_right
-    end
+    if @player.colide?(@tile.hit_zone)
 
-    if button_down? Gosu::KbUp or button_down? Gosu::GpButton0 then
-      #@player.accelerate
-    end
-
-    #should not go through floor
-    binding.pry
-    if @player.player_hit_zone.left < @tile.hit_zone.right
+    else
       @player.move
     end
 
