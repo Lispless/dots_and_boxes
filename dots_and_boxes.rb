@@ -6,8 +6,11 @@ require_relative 'lib/Player.rb'
 require_relative 'lib/Ground.rb'
 
 class GameWindow < Gosu::Window
+  attr_reader :gravity, :max_fall
   def initialize
     super(700, 400, false)
+    @gravity = 0.5
+    @max_fall = 2
     self.caption = "Dots and Boxes"
 
     @background_image = Gosu::Image.new(self, "media/ghbg.png", true)
@@ -16,15 +19,6 @@ class GameWindow < Gosu::Window
     @player.warp(320, 240)
     @tile = Ground.new(self,120,240)
   end
-
-  # def colides?(player, world, enemies)
-  #   world.each do |object|
-
-
-  #   else
-  #     return false
-  #   end
-  # end
 
 
 
