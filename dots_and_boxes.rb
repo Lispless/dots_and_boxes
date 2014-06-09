@@ -1,5 +1,4 @@
 require 'gosu'
-require 'pry'
 require_relative 'lib/bounding_box.rb'
 require_relative 'lib/bounding_area.rb'
 require_relative 'lib/Player.rb'
@@ -9,28 +8,22 @@ class GameWindow < Gosu::Window
   attr_reader :gravity, :max_fall
   def initialize
     super(700, 400, false)
-    @gravity = 0.5
-    @max_fall = 2
     self.caption = "Dots and Boxes"
 
     @background_image = Gosu::Image.new(self, "media/ghbg.png", true)
 
     @player = Player.new(self)
     @player.warp(320, 240)
-    @tile = Ground.new(self,120,240)
+    @tile = Ground.new(self, 120,240)
+    @gravity = 0.9
+    @max_fall = 2
   end
-
-
 
   def update
     @player.update(self)
-
-    if @player.colide?(@tile.hit_zone)
-
-    else
+    if !@player.colide?(@tile.hit_zone)
       @player.move
     end
-
   end
 
   def draw

@@ -23,7 +23,7 @@ class Player
   end
 
   def move_up
-    @vel_y += Gosu::offset_y(0, 2)
+    @vel_y += Gosu::offset_y(0, 1.5)
   end
   # def accelerate
 
