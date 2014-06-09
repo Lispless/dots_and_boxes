@@ -1,5 +1,6 @@
 require 'gosu'
-require_relative 'bounding_box.rb'
+require_relative 'lib/bounding_box.rb'
+require_relative 'lib/bounding_area.rb'
 
 class GameWindow < Gosu::Window
   def initialize
